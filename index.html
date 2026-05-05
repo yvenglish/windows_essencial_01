@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decole | Aula Prática Fundamental de Windows</title>
+  <style>
+    :root {
+      --blue-dark: #071f4f;
+      --blue: #0d3b8e;
+      --blue-soft: #eaf1ff;
+      --red: #c8323a;
+      --red-soft: #fff0f1;
+      --text: #182033;
+      --muted: #667085;
+      --line: #e6eaf2;
+      --bg: #f7f9fc;
+      --white: #ffffff;
+      --green: #16a36a;
+      --shadow: 0 18px 45px rgba(7, 31, 79, 0.10);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    button, input, textarea { font-family: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .topbar-inner { width: min(1120px, calc(100% - 32px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px 0; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand img { width: 118px; height: auto; display: block; }
+    .brand-text { border-left: 1px solid var(--line); padding-left: 12px; font-size: 0.82rem; color: var(--muted); line-height: 1.25; }
+    .progress-wrap { width: min(360px, 42vw); }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; }
+    .progress-bar { height: 10px; background: var(--blue-soft); border-radius: 999px; overflow: hidden; border: 1px solid #d8e5ff; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue-dark), var(--red)); border-radius: inherit; transition: width 0.35s ease; }
+    .hero { background: radial-gradient(circle at top right, rgba(200, 50, 58, 0.16), transparent 32%), linear-gradient(135deg, #ffffff 0%, #edf4ff 100%); border-bottom: 1px solid var(--line); }
+    .hero-inner { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 56px 0 42px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--red-soft); color: var(--red); border: 1px solid rgba(200, 50, 58, 0.16); padding: 8px 12px; border-radius: 999px; font-weight: 700; font-size: 0.82rem; margin-bottom: 18px; }
+    h1 { font-size: clamp(2.1rem, 5vw, 4.6rem); line-height: 0.98; color: var(--blue-dark); letter-spacing: -0.055em; margin-bottom: 20px; }
+    .hero p { font-size: 1.08rem; max-width: 640px; color: #3b455c; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .btn { border: 0; cursor: pointer; padding: 13px 18px; border-radius: 999px; font-weight: 800; transition: 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--blue-dark); color: var(--white); box-shadow: 0 12px 24px rgba(7, 31, 79, 0.20); }
+    .btn-red { background: var(--red); color: var(--white); box-shadow: 0 12px 24px rgba(200, 50, 58, 0.20); }
+    .btn-light { background: var(--white); color: var(--blue-dark); border: 1px solid var(--line); }
+    .hero-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; }
+    .hero-card h2 { color: var(--blue-dark); font-size: 1.25rem; margin-bottom: 14px; }
+    .goal-list { list-style: none; display: grid; gap: 10px; }
+    .goal-list li { display: flex; gap: 10px; align-items: flex-start; background: #f8fbff; border: 1px solid var(--line); padding: 12px; border-radius: 16px; }
+    .check-icon { width: 24px; height: 24px; flex: 0 0 24px; display: grid; place-items: center; color: var(--white); background: var(--blue-dark); border-radius: 50%; font-size: 0.8rem; font-weight: 900; }
+    main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 60px; }
+    .section-title { margin: 18px 0 18px; }
+    .section-title span { color: var(--red); font-weight: 900; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.08em; }
+    .section-title h2 { color: var(--blue-dark); font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1.1; letter-spacing: -0.035em; margin-top: 4px; }
+    .step-grid { display: grid; gap: 18px; }
+    .step { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 8px 28px rgba(7, 31, 79, 0.06); padding: 24px; display: grid; grid-template-columns: 68px 1fr; gap: 18px; position: relative; overflow: hidden; }
+    .step::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px; background: linear-gradient(90deg, var(--blue-dark), var(--red)); opacity: 0; transition: opacity 0.25s ease; }
+    .step.done::before { opacity: 1; }
+    .step-number { width: 58px; height: 58px; border-radius: 20px; background: var(--blue-soft); color: var(--blue-dark); display: grid; place-items: center; font-weight: 900; font-size: 1.35rem; border: 1px solid #d9e7ff; }
+    .step.done .step-number { background: var(--blue-dark); color: var(--white); }
+    .step-content h3 { font-size: 1.35rem; color: var(--blue-dark); margin-bottom: 6px; letter-spacing: -0.02em; }
+    .time { display: inline-flex; color: var(--red); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; }
+    .cards-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .mini-card { padding: 14px; border-radius: 18px; background: #f8fbff; border: 1px solid var(--line); }
+    .mini-card strong { display: block; color: var(--blue-dark); margin-bottom: 5px; }
+    .tip, .mistake { padding: 14px 16px; border-radius: 18px; margin: 14px 0; display: flex; gap: 10px; align-items: flex-start; }
+    .tip { background: var(--blue-soft); border: 1px solid #d8e5ff; }
+    .mistake { background: var(--red-soft); border: 1px solid rgba(200, 50, 58, 0.16); }
+    .tag { font-weight: 900; color: var(--blue-dark); white-space: nowrap; }
+    .mistake .tag { color: var(--red); }
+    .task-list { display: grid; gap: 9px; margin-top: 14px; }
+    .task { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; }
+    .task input { width: 18px; height: 18px; accent-color: var(--blue-dark); flex: 0 0 auto; }
+    .complete-step { margin-top: 18px; }
+    .complete-step.completed { background: var(--green); }
+    .quiz-area { display: grid; gap: 16px; margin-top: 18px; }
+    .question { background: var(--white); border: 1px solid var(--line); border-radius: 20px; padding: 18px; }
+    .question h4 { color: var(--blue-dark); margin-bottom: 12px; font-size: 1rem; }
+    .answers { display: grid; gap: 8px; }
+    .answer { border: 1px solid var(--line); background: #f8fbff; border-radius: 14px; padding: 11px 12px; text-align: left; cursor: pointer; color: var(--text); transition: 0.2s ease; }
+    .answer:hover { border-color: var(--blue); }
+    .answer.correct { background: #ecfff6; border-color: rgba(22, 163, 106, 0.5); color: #087a4b; font-weight: 800; }
+    .answer.wrong { background: var(--red-soft); border-color: rgba(200, 50, 58, 0.38); color: var(--red); font-weight: 800; }
+    .feedback { margin-top: 10px; font-weight: 800; display: none; }
+    .feedback.show { display: block; }
+    .student-note { width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--line); border-radius: 18px; padding: 14px; margin-top: 12px; font-size: 1rem; outline: none; }
+    .student-note:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(13, 59, 142, 0.08); }
+    .summary-card { margin-top: 28px; background: linear-gradient(135deg, var(--blue-dark), #0d3b8e); color: var(--white); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .summary-card h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.1; margin-bottom: 10px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+    .summary-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 18px; padding: 14px; }
+    .summary-item strong { display: block; font-size: 1.6rem; line-height: 1; margin-bottom: 6px; }
+    .footer { padding: 28px 16px 40px; color: var(--muted); text-align: center; border-top: 1px solid var(--line); background: var(--white); }
+    .toast { position: fixed; right: 18px; bottom: 18px; max-width: 320px; background: var(--blue-dark); color: var(--white); padding: 14px 16px; border-radius: 18px; box-shadow: var(--shadow); opacity: 0; transform: translateY(12px); pointer-events: none; transition: 0.25s ease; z-index: 50; font-weight: 700; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 820px) {
+      .topbar-inner { align-items: flex-start; flex-direction: column; }
+      .progress-wrap { width: 100%; }
+      .brand img { width: 104px; }
+      .brand-text { font-size: 0.76rem; }
+      .hero-inner { grid-template-columns: 1fr; padding: 34px 0 28px; }
+      .hero-card { padding: 20px; }
+      .step { grid-template-columns: 1fr; padding: 20px; }
+      .cards-row, .summary-grid { grid-template-columns: 1fr; }
+      .btn { width: 100%; }
+      .tip, .mistake { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img src="LOGO2.jpg" alt="Logo Decole" />
+        <div class="brand-text">Aula prática fundamental<br />Windows 11 Essencial</div>
+      </div>
+      <div class="progress-wrap" aria-label="Progresso da aula">
+        <div class="progress-label"><span>Progresso da aula</span><strong id="progressText">0%</strong></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">🚀 Aula prática • 2 horas</div>
+        <h1>Domine o básico antes de avançar.</h1>
+        <p>Nesta aula, você vai aprender a se localizar no computador, entender a diferença entre arquivos e programas, criar pastas e organizar seus documentos de forma mais profissional.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#passos">Começar passo a passo</a>
+          <a class="btn btn-light" href="#mini-teste">Ir para o mini teste</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h2>Ao final da aula, você deve conseguir:</h2>
+        <ul class="goal-list">
+          <li><span class="check-icon">✓</span><span>Abrir programas sem depender do professor.</span></li>
+          <li><span class="check-icon">✓</span><span>Entender o que é arquivo, pasta e programa.</span></li>
+          <li><span class="check-icon">✓</span><span>Criar, renomear e organizar pastas.</span></li>
+          <li><span class="check-icon">✓</span><span>Evitar o erro de deixar tudo jogado na área de trabalho.</span></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <main>
+    <section id="passos">
+      <div class="section-title"><span>Passo a passo</span><h2>Siga a aula em ordem e marque cada etapa concluída.</h2></div>
+      <div class="step-grid">
+        <article class="step" data-step>
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <span class="time">0–15 min • Aquecimento</span>
+            <h3>Mostre o que você já sabe</h3>
+            <p>Antes da explicação, tente fazer sozinho. Isso ajuda você e a professora a entenderem seu nível real.</p>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" /> Abrir o menu Iniciar.</label>
+              <label class="task"><input type="checkbox" /> Abrir o Explorador de Arquivos.</label>
+              <label class="task"><input type="checkbox" /> Mostrar onde você salvaria um arquivo.</label>
+            </div>
+            <div class="mistake"><strong class="tag">Erro comum</strong><span>Clicar em tudo sem saber o que está abrindo. Antes de clicar, leia o nome do item.</span></div>
+            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+          </div>
+        </article>
+
+        <article class="step" data-step>
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <span class="time">15–35 min • Entenda</span>
+            <h3>Arquivo, pasta e programa</h3>
+            <p>Essas três palavras aparecem o tempo todo. Se você entende a diferença, o computador fica muito menos confuso.</p>
+            <div class="cards-row">
+              <div class="mini-card"><strong>Programa</strong>É o aplicativo que você usa. Exemplo: Word, Excel, navegador.</div>
+              <div class="mini-card"><strong>Arquivo</strong>É o que você cria, baixa ou recebe. Exemplo: foto, PDF, documento.</div>
+              <div class="mini-card"><strong>Pasta</strong>É o lugar onde você organiza arquivos.</div>
+              <div class="mini-card"><strong>Área de trabalho</strong>Não deve ser depósito. Use apenas para atalhos importantes.</div>
+            </div>
+            <div class="tip"><strong class="tag">Dica Decole</strong><span>Um aluno organizado encontra arquivos mais rápido e trabalha melhor.</span></div>
+            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+          </div>
+        </article>
+
+        <article class="step" data-step>
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <span class="time">35–70 min • Faça com a professora</span>
+            <h3>Crie sua estrutura de organização</h3>
+            <p>Agora você vai criar uma organização simples para usar durante o curso.</p>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" /> Criar uma pasta chamada <strong>Curso Decole</strong>.</label>
+              <label class="task"><input type="checkbox" /> Dentro dela, criar a pasta <strong>Windows 11</strong>.</label>
+              <label class="task"><input type="checkbox" /> Criar subpastas: <strong>Documentos</strong>, <strong>Imagens</strong> e <strong>Atividades</strong>.</label>
+              <label class="task"><input type="checkbox" /> Renomear uma pasta sem apagar o nome errado.</label>
+            </div>
+            <div class="mistake"><strong class="tag">Erro comum</strong><span>Criar várias pastas com nomes parecidos, tipo “Nova pasta”, “Nova pasta (2)” e depois não saber onde está nada.</span></div>
+            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+          </div>
+        </article>
+
+        <article class="step" data-step>
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <span class="time">70–100 min • Pratique sozinho</span>
+            <h3>Desafio: organize o computador bagunçado</h3>
+            <p>A professora vai entregar ou indicar arquivos misturados. Sua missão é deixar tudo no lugar correto.</p>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" /> Separar imagens na pasta Imagens.</label>
+              <label class="task"><input type="checkbox" /> Separar documentos na pasta Documentos.</label>
+              <label class="task"><input type="checkbox" /> Separar atividades na pasta Atividades.</label>
+              <label class="task"><input type="checkbox" /> Conferir se nada ficou solto fora das pastas.</label>
+            </div>
+            <div class="tip"><strong class="tag">Dica Decole</strong><span>Não basta arrastar. Pense: “onde eu encontraria isso depois?”</span></div>
+            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+          </div>
+        </article>
+
+        <article class="step" data-step>
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <span class="time">100–120 min • Valide</span>
+            <h3>Explique o que você fez</h3>
+            <p>Para provar que aprendeu, você precisa explicar sua organização. Quem explica, entende melhor.</p>
+            <label for="studentNote"><strong>Escreva em poucas palavras:</strong> como você organizou seus arquivos?</label>
+            <textarea class="student-note" id="studentNote" placeholder="Exemplo: coloquei os documentos em uma pasta, as imagens em outra e deixei as atividades separadas para encontrar mais rápido..."></textarea>
+            <div class="mistake"><strong class="tag">Erro comum</strong><span>Dizer “eu só coloquei ali” sem saber explicar a lógica. Organização precisa ter sentido.</span></div>
+            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="mini-teste">
+      <div class="section-title"><span>Mini teste</span><h2>Veja se você realmente entendeu.</h2></div>
+      <div class="quiz-area">
+        <div class="question" data-question>
+          <h4>1. O que é uma pasta?</h4>
+          <div class="answers">
+            <button class="answer" data-correct="false">Um programa para editar textos.</button>
+            <button class="answer" data-correct="true">Um lugar para organizar arquivos.</button>
+            <button class="answer" data-correct="false">Um tipo de vírus do computador.</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+        <div class="question" data-question>
+          <h4>2. Qual é um exemplo de programa?</h4>
+          <div class="answers">
+            <button class="answer" data-correct="false">Uma foto baixada da internet.</button>
+            <button class="answer" data-correct="false">Uma pasta chamada Documentos.</button>
+            <button class="answer" data-correct="true">Microsoft Word.</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+        <div class="question" data-question>
+          <h4>3. Por que não é ideal salvar tudo na área de trabalho?</h4>
+          <div class="answers">
+            <button class="answer" data-correct="true">Porque fica bagunçado e difícil de encontrar depois.</button>
+            <button class="answer" data-correct="false">Porque o computador para de ligar.</button>
+            <button class="answer" data-correct="false">Porque arquivos só podem ficar na pasta Downloads.</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-card">
+      <h2>Resumo da aula</h2>
+      <p>Hoje você treinou autonomia digital: localizar, criar, nomear, organizar e explicar sua própria lógica de organização.</p>
+      <div class="summary-grid">
+        <div class="summary-item"><strong id="doneCount">0</strong>etapas concluídas</div>
+        <div class="summary-item"><strong id="taskCount">0</strong>tarefas marcadas</div>
+        <div class="summary-item"><strong id="quizScore">0/3</strong>acertos no mini teste</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Decole Cursos Profissionalizantes e Idiomas • Aula prática fundamental de Windows 11</footer>
+  <div class="toast" id="toast">Etapa concluída. Continue para a próxima.</div>
+
+  <script>
+    const steps = [...document.querySelectorAll('[data-step]')];
+    const completeButtons = [...document.querySelectorAll('.complete-step')];
+    const checkboxes = [...document.querySelectorAll('.task input')];
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const doneCount = document.getElementById('doneCount');
+    const taskCount = document.getElementById('taskCount');
+    const quizScore = document.getElementById('quizScore');
+    const toast = document.getElementById('toast');
+    let quizCorrect = new Set();
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+    function updateProgress() {
+      const completedSteps = steps.filter(step => step.classList.contains('done')).length;
+      const checkedTasks = checkboxes.filter(box => box.checked).length;
+      const score = completedSteps + checkedTasks + quizCorrect.size;
+      const total = steps.length + checkboxes.length + 3;
+      const percent = Math.round((score / total) * 100);
+      progressFill.style.width = `${percent}%`;
+      progressText.textContent = `${percent}%`;
+      doneCount.textContent = completedSteps;
+      taskCount.textContent = checkedTasks;
+      quizScore.textContent = `${quizCorrect.size}/3`;
+    }
+    completeButtons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        const step = steps[index];
+        step.classList.toggle('done');
+        const isDone = step.classList.contains('done');
+        button.textContent = isDone ? 'Etapa concluída ✓' : 'Concluí essa etapa';
+        button.classList.toggle('completed', isDone);
+        showToast(isDone ? 'Boa! Etapa concluída.' : 'Etapa desmarcada.');
+        updateProgress();
+      });
+    });
+    checkboxes.forEach(box => box.addEventListener('change', updateProgress));
+    document.querySelectorAll('[data-question]').forEach((question, questionIndex) => {
+      const answers = [...question.querySelectorAll('.answer')];
+      const feedback = question.querySelector('.feedback');
+      answers.forEach(answer => {
+        answer.addEventListener('click', () => {
+          answers.forEach(item => item.classList.remove('correct', 'wrong'));
+          const isCorrect = answer.dataset.correct === 'true';
+          answer.classList.add(isCorrect ? 'correct' : 'wrong');
+          if (isCorrect) {
+            quizCorrect.add(questionIndex);
+            feedback.textContent = 'Correto! Você entendeu esse ponto.';
+            feedback.style.color = '#087a4b';
+          } else {
+            quizCorrect.delete(questionIndex);
+            feedback.textContent = 'Quase. Leia novamente a explicação e tente pensar na função de cada item.';
+            feedback.style.color = '#c8323a';
+          }
+          feedback.classList.add('show');
+          updateProgress();
+        });
+      });
+    });
+    updateProgress();
+  </script>
+</body>
+</html>
