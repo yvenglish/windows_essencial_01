@@ -24,13 +24,17 @@
     html { scroll-behavior: smooth; }
     body { font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
     button, input, textarea { font-family: inherit; }
-    .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-    .topbar-inner { width: min(1120px, calc(100% - 32px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px 0; }
-    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); box-shadow: 0 10px 30px rgba(7, 31, 79, 0.05); }
+    .topbar-inner { width: min(1120px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 12px 0; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; text-decoration: none; }
     .brand img { width: 118px; height: auto; display: block; }
     .brand-text { border-left: 1px solid var(--line); padding-left: 12px; font-size: 0.82rem; color: var(--muted); line-height: 1.25; }
-    .progress-wrap { width: min(360px, 42vw); }
+    .nav-links { justify-self: center; display: flex; align-items: center; gap: 8px; background: #f3f6fb; border: 1px solid var(--line); padding: 6px; border-radius: 999px; }
+    .nav-link { color: var(--blue-dark); text-decoration: none; font-size: 0.84rem; font-weight: 800; padding: 9px 13px; border-radius: 999px; transition: 0.2s ease; white-space: nowrap; }
+    .nav-link:hover { background: var(--white); box-shadow: 0 6px 16px rgba(7, 31, 79, 0.08); transform: translateY(-1px); }
+    .progress-wrap { width: 260px; background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 10px 12px; box-shadow: 0 8px 22px rgba(7, 31, 79, 0.06); }
     .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; }
+    .progress-label strong { color: var(--blue-dark); }
     .progress-bar { height: 10px; background: var(--blue-soft); border-radius: 999px; overflow: hidden; border: 1px solid #d8e5ff; }
     .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue-dark), var(--red)); border-radius: inherit; transition: width 0.35s ease; }
     .hero { background: radial-gradient(circle at top right, rgba(200, 50, 58, 0.16), transparent 32%), linear-gradient(135deg, #ffffff 0%, #edf4ff 100%); border-bottom: 1px solid var(--line); }
@@ -94,11 +98,40 @@
     .footer { padding: 28px 16px 40px; color: var(--muted); text-align: center; border-top: 1px solid var(--line); background: var(--white); }
     .toast { position: fixed; right: 18px; bottom: 18px; max-width: 320px; background: var(--blue-dark); color: var(--white); padding: 14px 16px; border-radius: 18px; box-shadow: var(--shadow); opacity: 0; transform: translateY(12px); pointer-events: none; transition: 0.25s ease; z-index: 50; font-weight: 700; }
     .toast.show { opacity: 1; transform: translateY(0); }
+
+    .step.locked { display: none; }
+    .teacher-gate { margin-top: 18px; padding: 16px; border: 1px dashed rgba(13, 59, 142, 0.28); background: #f8fbff; border-radius: 18px; }
+    .teacher-gate p { color: var(--muted); font-size: 0.92rem; margin-bottom: 12px; }
+    .gate-status { margin-top: 10px; font-size: 0.86rem; color: var(--muted); font-weight: 700; }
+    .locked-section { display: none; }
+    .nav-link.disabled { opacity: 0.45; pointer-events: none; }
+    .teacher-note { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 9px 12px; border-radius: 999px; background: var(--blue-soft); color: var(--blue-dark); font-size: 0.84rem; font-weight: 800; }
+
+
+    .modal-overlay { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(7, 31, 79, 0.58); backdrop-filter: blur(8px); }
+    .modal-overlay.show { display: flex; }
+    .password-modal { width: min(430px, 100%); background: var(--white); border: 1px solid var(--line); border-radius: 26px; box-shadow: 0 28px 80px rgba(7, 31, 79, 0.28); padding: 24px; animation: modalIn 0.22s ease both; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-icon { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; color: var(--white); background: linear-gradient(135deg, var(--red), #9d1f2a); box-shadow: 0 14px 24px rgba(200, 50, 58, 0.22); font-size: 1.4rem; margin-bottom: 14px; }
+    .password-modal h3 { color: var(--blue-dark); font-size: 1.45rem; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .password-modal p { color: var(--muted); font-size: 0.95rem; margin-bottom: 16px; }
+    .modal-field label { display: block; color: var(--blue-dark); font-weight: 900; font-size: 0.86rem; margin-bottom: 8px; }
+    .modal-field input { width: 100%; border: 1px solid var(--line); border-radius: 16px; padding: 14px 14px; font-size: 1.05rem; outline: none; background: #f8fbff; color: var(--blue-dark); font-weight: 800; }
+    .modal-field input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(13, 59, 142, 0.10); background: var(--white); }
+    .modal-error { min-height: 22px; color: var(--red); font-weight: 800; font-size: 0.86rem; margin-top: 8px; }
+    .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .btn-modal-cancel { background: var(--white); color: var(--blue-dark); border: 1px solid var(--line); }
+    .btn-modal-confirm { background: var(--blue-dark); color: var(--white); }
+
     @media (max-width: 820px) {
-      .topbar-inner { align-items: flex-start; flex-direction: column; }
+      .topbar-inner { grid-template-columns: 1fr; align-items: stretch; gap: 10px; }
+      .brand { justify-content: space-between; }
+      .nav-links { justify-self: stretch; justify-content: space-between; overflow-x: auto; border-radius: 18px; padding: 6px; scrollbar-width: none; }
+      .nav-links::-webkit-scrollbar { display: none; }
+      .nav-link { flex: 1; text-align: center; font-size: 0.78rem; padding: 9px 10px; }
       .progress-wrap { width: 100%; }
       .brand img { width: 104px; }
-      .brand-text { font-size: 0.76rem; }
+      .brand-text { font-size: 0.76rem; text-align: right; }
       .hero-inner { grid-template-columns: 1fr; padding: 34px 0 28px; }
       .hero-card { padding: 20px; }
       .step { grid-template-columns: 1fr; padding: 20px; }
@@ -108,15 +141,22 @@
     }
   </style>
 </head>
-<body>
+<body id="topo">
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <img src="LOGO2.jpg" alt="Logo Decole" />
-        <div class="brand-text">Aula prática fundamental<br />Windows 11 Essencial</div>
-      </div>
+      <a class="brand" href="#topo" aria-label="Voltar para o início da aula">
+        <img src="logo-decole.jpeg" alt="Logo Decole" />
+        <div class="brand-text">Windows 11 Essencial<br />Aula prática fundamental</div>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a class="nav-link" href="#passos">Passo a passo</a>
+        <a class="nav-link" href="#mini-teste" id="miniTestNav">Mini teste</a>
+        <a class="nav-link" href="#resumo" id="summaryNav">Resumo</a>
+      </nav>
+
       <div class="progress-wrap" aria-label="Progresso da aula">
-        <div class="progress-label"><span>Progresso da aula</span><strong id="progressText">0%</strong></div>
+        <div class="progress-label"><span>Progresso</span><strong id="progressText">0%</strong></div>
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
       </div>
     </div>
@@ -147,7 +187,7 @@
 
   <main>
     <section id="passos">
-      <div class="section-title"><span>Passo a passo</span><h2>Siga a aula em ordem e marque cada etapa concluída.</h2></div>
+      <div class="section-title"><span>Passo a passo</span><h2>Siga a aula em ordem. A próxima etapa só abre com a senha da professora.</h2><div class="teacher-note">🔒 Fluxo guiado pela professora</div></div>
       <div class="step-grid">
         <article class="step" data-step>
           <div class="step-number">1</div>
@@ -161,7 +201,7 @@
               <label class="task"><input type="checkbox" /> Mostrar onde você salvaria um arquivo.</label>
             </div>
             <div class="mistake"><strong class="tag">Erro comum</strong><span>Clicar em tudo sem saber o que está abrindo. Antes de clicar, leia o nome do item.</span></div>
-            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+            <button class="btn btn-red complete-step" type="button">Liberar próxima etapa</button>
           </div>
         </article>
 
@@ -178,7 +218,7 @@
               <div class="mini-card"><strong>Área de trabalho</strong>Não deve ser depósito. Use apenas para atalhos importantes.</div>
             </div>
             <div class="tip"><strong class="tag">Dica Decole</strong><span>Um aluno organizado encontra arquivos mais rápido e trabalha melhor.</span></div>
-            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+            <button class="btn btn-red complete-step" type="button">Liberar próxima etapa</button>
           </div>
         </article>
 
@@ -195,7 +235,7 @@
               <label class="task"><input type="checkbox" /> Renomear uma pasta sem apagar o nome errado.</label>
             </div>
             <div class="mistake"><strong class="tag">Erro comum</strong><span>Criar várias pastas com nomes parecidos, tipo “Nova pasta”, “Nova pasta (2)” e depois não saber onde está nada.</span></div>
-            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+            <button class="btn btn-red complete-step" type="button">Liberar próxima etapa</button>
           </div>
         </article>
 
@@ -212,7 +252,7 @@
               <label class="task"><input type="checkbox" /> Conferir se nada ficou solto fora das pastas.</label>
             </div>
             <div class="tip"><strong class="tag">Dica Decole</strong><span>Não basta arrastar. Pense: “onde eu encontraria isso depois?”</span></div>
-            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+            <button class="btn btn-red complete-step" type="button">Liberar próxima etapa</button>
           </div>
         </article>
 
@@ -225,13 +265,13 @@
             <label for="studentNote"><strong>Escreva em poucas palavras:</strong> como você organizou seus arquivos?</label>
             <textarea class="student-note" id="studentNote" placeholder="Exemplo: coloquei os documentos em uma pasta, as imagens em outra e deixei as atividades separadas para encontrar mais rápido..."></textarea>
             <div class="mistake"><strong class="tag">Erro comum</strong><span>Dizer “eu só coloquei ali” sem saber explicar a lógica. Organização precisa ter sentido.</span></div>
-            <button class="btn btn-red complete-step" type="button">Concluí essa etapa</button>
+            <button class="btn btn-red complete-step" type="button">Liberar próxima etapa</button>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="mini-teste">
+    <section id="mini-teste" class="locked-section">
       <div class="section-title"><span>Mini teste</span><h2>Veja se você realmente entendeu.</h2></div>
       <div class="quiz-area">
         <div class="question" data-question>
@@ -264,7 +304,7 @@
       </div>
     </section>
 
-    <section class="summary-card">
+    <section class="summary-card locked-section" id="resumo">
       <h2>Resumo da aula</h2>
       <p>Hoje você treinou autonomia digital: localizar, criar, nomear, organizar e explicar sua própria lógica de organização.</p>
       <div class="summary-grid">
@@ -276,6 +316,23 @@
   </main>
 
   <footer class="footer">Decole Cursos Profissionalizantes e Idiomas • Aula prática fundamental de Windows 11</footer>
+
+  <div class="modal-overlay" id="passwordModal" aria-hidden="true">
+    <div class="password-modal" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle">
+      <div class="modal-icon">🔒</div>
+      <h3 id="passwordModalTitle">Liberação da professora</h3>
+      <p>Digite uma das senhas da professora para concluir esta etapa e abrir a próxima.</p>
+      <div class="modal-field">
+        <label for="teacherPasswordInput">Código do professor</label>
+        <input id="teacherPasswordInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Digite o código" />
+        <div class="modal-error" id="passwordModalError"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-modal-cancel" type="button" id="passwordCancelBtn">Cancelar</button>
+        <button class="btn btn-modal-confirm" type="button" id="passwordConfirmBtn">Entrar</button>
+      </div>
+    </div>
+  </div>
   <div class="toast" id="toast">Etapa concluída. Continue para a próxima.</div>
 
   <script>
@@ -306,17 +363,130 @@
       taskCount.textContent = checkedTasks;
       quizScore.textContent = `${quizCorrect.size}/3`;
     }
-    completeButtons.forEach((button, index) => {
-      button.addEventListener('click', () => {
-        const step = steps[index];
-        step.classList.toggle('done');
+    // SENHAS DA PROFESSORA: edite aqui se precisar trocar depois.
+    const TEACHER_PASSWORDS = ['3147240403', '2799661'];
+    const STORAGE_KEY = 'decole_windows_essencial_unlocked_step';
+    let unlockedStep = Number(localStorage.getItem(STORAGE_KEY) || '0');
+
+    const miniTestSection = document.getElementById('mini-teste');
+    const summarySection = document.getElementById('resumo');
+    const miniTestNav = document.getElementById('miniTestNav');
+    const summaryNav = document.getElementById('summaryNav');
+
+    const passwordModal = document.getElementById('passwordModal');
+    const teacherPasswordInput = document.getElementById('teacherPasswordInput');
+    const passwordModalError = document.getElementById('passwordModalError');
+    const passwordCancelBtn = document.getElementById('passwordCancelBtn');
+    const passwordConfirmBtn = document.getElementById('passwordConfirmBtn');
+    let passwordResolver = null;
+
+    function closePasswordModal(result) {
+      passwordModal.classList.remove('show');
+      passwordModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+
+      if (passwordResolver) {
+        passwordResolver(result);
+        passwordResolver = null;
+      }
+    }
+
+    function askTeacherPassword() {
+      passwordModal.classList.add('show');
+      passwordModal.setAttribute('aria-hidden', 'false');
+      passwordModalError.textContent = '';
+      teacherPasswordInput.value = '';
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(() => teacherPasswordInput.focus(), 60);
+
+      return new Promise(resolve => {
+        passwordResolver = resolve;
+      });
+    }
+
+    function confirmTeacherPassword() {
+      const typedPassword = teacherPasswordInput.value.trim();
+
+      if (!TEACHER_PASSWORDS.includes(typedPassword)) {
+        passwordModalError.textContent = 'Código incorreto. Peça para a professora conferir.';
+        teacherPasswordInput.select();
+        showToast('Senha incorreta. A próxima etapa continua bloqueada.');
+        return;
+      }
+
+      closePasswordModal(true);
+    }
+
+    passwordConfirmBtn.addEventListener('click', confirmTeacherPassword);
+    passwordCancelBtn.addEventListener('click', () => closePasswordModal(false));
+    passwordModal.addEventListener('click', event => {
+      if (event.target === passwordModal) closePasswordModal(false);
+    });
+    teacherPasswordInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') confirmTeacherPassword();
+      if (event.key === 'Escape') closePasswordModal(false);
+    });
+
+    function renderStepLocks() {
+      steps.forEach((step, index) => {
+        const isUnlocked = index <= unlockedStep;
+        step.classList.toggle('locked', !isUnlocked);
+
+        const button = step.querySelector('.complete-step');
+        if (!button) return;
+
+        const isLastStep = index === steps.length - 1;
         const isDone = step.classList.contains('done');
-        button.textContent = isDone ? 'Etapa concluída ✓' : 'Concluí essa etapa';
-        button.classList.toggle('completed', isDone);
-        showToast(isDone ? 'Boa! Etapa concluída.' : 'Etapa desmarcada.');
+
+        if (isDone) {
+          button.textContent = isLastStep ? 'Aula liberada ✓' : 'Próxima etapa liberada ✓';
+          button.classList.add('completed');
+        } else {
+          button.textContent = isLastStep ? 'Liberar mini teste' : 'Liberar próxima etapa';
+          button.classList.remove('completed');
+        }
+      });
+
+      const courseUnlocked = unlockedStep >= steps.length;
+      miniTestSection.classList.toggle('locked-section', !courseUnlocked);
+      summarySection.classList.toggle('locked-section', !courseUnlocked);
+      miniTestNav.classList.toggle('disabled', !courseUnlocked);
+      summaryNav.classList.toggle('disabled', !courseUnlocked);
+    }
+
+    completeButtons.forEach((button, index) => {
+      button.addEventListener('click', async () => {
+        if (index > unlockedStep) {
+          showToast('Essa etapa ainda está bloqueada.');
+          return;
+        }
+
+        const passwordAccepted = await askTeacherPassword();
+        if (!passwordAccepted) return;
+
+        const step = steps[index];
+        step.classList.add('done');
+
+        if (unlockedStep <= index) {
+          unlockedStep = index + 1;
+          localStorage.setItem(STORAGE_KEY, String(unlockedStep));
+        }
+
+        renderStepLocks();
         updateProgress();
+
+        if (index < steps.length - 1) {
+          showToast('Senha aceita. Próxima etapa liberada.');
+          setTimeout(() => steps[index + 1].scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+        } else {
+          showToast('Senha aceita. Mini teste e resumo liberados.');
+          setTimeout(() => miniTestSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+        }
       });
     });
+
+    renderStepLocks();
     checkboxes.forEach(box => box.addEventListener('change', updateProgress));
     document.querySelectorAll('[data-question]').forEach((question, questionIndex) => {
       const answers = [...question.querySelectorAll('.answer')];
